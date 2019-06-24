@@ -14,6 +14,14 @@ const projects = [
 
 app.get('/projects', (req, res) => res.json(projects))
 
+app.post('/projects', (req, res) => {
+    const project = {...req.body, tasks: []}
+
+    projects.push(project)
+
+    return res.json(project)
+})
+
 app.listen(3333, () => {
     console.log("Server Running");
 })
