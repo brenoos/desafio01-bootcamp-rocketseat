@@ -34,6 +34,16 @@ app.put('/projects/:id',(req, res) => {
 
 })
 
+app.delete('/projects/:id', (req, res) => {
+    const { id } = req.params;
+
+    const projectIndex = projects.findIndex(p => p.id === id)
+
+    projects.splice(projectIndex, 1)
+
+    return res.json({ok: true})
+})
+
 app.listen(3333, () => {
     console.log("Server Running");
 })
