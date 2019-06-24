@@ -12,14 +12,26 @@ const projects = [
     }
 ]
 
-app.get('/projects', (req, res) => res.json(projects))
+app.get('/projects', (req, res) => res.json(projects));
 
 app.post('/projects', (req, res) => {
     const project = {...req.body, tasks: []}
 
-    projects.push(project)
+    projects.push(project);
+
+    return res.json(project);
+})
+
+app.put('/projects/:id',(req, res) => {
+    const { id } = req.params;
+    const { title } = req.body;
+
+    const project = projects.find(p => p.id === id)
+
+    project.title = title
 
     return res.json(project)
+
 })
 
 app.listen(3333, () => {
