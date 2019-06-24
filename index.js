@@ -12,6 +12,20 @@ const projects = [
     }
 ];
 
+function checkProjectExists(req, res, next){
+    const { id } = req.params
+    const project = projects.find(p => p.id === id);
+
+    if(!project){
+        return res.status(400).json({error: "project does not exists"});
+    }
+
+    req.project = project
+
+    return next();
+
+}
+
 app.get('/projects', (req, res) => res.json(projects));
 
 app.post('/projects', (req, res) => {
@@ -22,11 +36,9 @@ app.post('/projects', (req, res) => {
     return res.json(project);
 })
 
-app.put('/projects/:id',(req, res) => {
-    const { id } = req.params;
+app.put('/projects/:id', checkProjectExists, (req, res) => {
     const { title } = req.body;
-
-    const project = projects.find(p => p.id === id);
+    const { project } = req;
 
     project.title = title;
 
@@ -34,7 +46,7 @@ app.put('/projects/:id',(req, res) => {
 
 })
 
-app.delete('/projects/:id', (req, res) => {
+app.delete('/projects/:id', checkProjectExists, (req, res) => {
     const { id } = req.params;
 
     const projectIndex = projects.findIndex(p => p.id === id);
@@ -44,11 +56,9 @@ app.delete('/projects/:id', (req, res) => {
     return res.json({ok: true});
 })
 
-app.post('/projects/:id/tasks', (req, res) => {
-    const { id } = req.params;
+app.post('/projects/:id/tasks', checkProjectExists, (req, res) => {
     const { title } = req.body;
-
-    const project = projects.find(p => p.id === id);
+    const { project }= req;
 
     project.tasks.push(title);
 
