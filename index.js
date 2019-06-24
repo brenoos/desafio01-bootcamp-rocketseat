@@ -11,6 +11,7 @@ const projects = [
         tasks: []
     }
 ];
+let requests = 0;
 
 function checkProjectExists(req, res, next){
     const { id } = req.params
@@ -25,6 +26,14 @@ function checkProjectExists(req, res, next){
     return next();
 
 }
+
+function requestCounter(req, res, next){
+    requests++
+    console.log(`Número de requisições ${requests}`)
+    return next();
+}
+
+app.use(requestCounter);
 
 app.get('/projects', (req, res) => res.json(projects));
 
